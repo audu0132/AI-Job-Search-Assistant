@@ -1,35 +1,25 @@
-import * as express from "express";
-import * as cors from "cors";
-import * as helmet from "helmet";
-import * as morgan from "morgan";
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+
 import authRoutes from "./routes/authRoutes";
 
+const app = express();
 
-const app = express.default();
+app.use(helmet());
+app.use(cors());
+app.use(morgan("dev"));
 
-// Security
-app.use(helmet.default());
-
-// CORS
-app.use(cors.default());
-
-// Logger
-app.use(morgan.default("dev"));
-
-
-
-// Body Parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
 app.use("/api/auth", authRoutes);
 
-// Root Route
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "API IS RUNNING...",
+    message: "AI Job Search Assistant API Running 🚀",
   });
 });
 

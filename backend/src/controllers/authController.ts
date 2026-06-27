@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import User from "../models/User";
+import generateToken from "../utils/generateToken";
 
 
 // Register User
 export const register = async (req: Request, res: Response) => {
   try {
+    console.log("Content-Type:", req.headers["content-type"]);
     console.log(req.body);
     const {
       firstName,
@@ -33,12 +35,64 @@ export const register = async (req: Request, res: Response) => {
       phone,
     });
 
+    // Password remove before sending response
+    const userObject = user.toObject();
+    const { password: userPassword, ...userWithoutPassword } = userObject;
+
     res.status(201).json({
       success: true,
       message: "User registered successfully",
-      user,
+      user: userWithoutPassword,
     });
 
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+// Login User
+export const login = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    // Email Check
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    // Password verify
+    const isMatch = await user.comparePassword(password);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    // JWT Create
+    const token = generateToken(user._id.toString());
+
+    // Password remove before sending response
+    const userObject = user.toObject();
+    const { password: _, ...userWithoutPassword } = userObject;
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      token,
+      user: userWithoutPassword,
+    });
   } catch (error) {
     console.error(error);
 
