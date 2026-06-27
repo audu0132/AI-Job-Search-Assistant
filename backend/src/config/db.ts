@@ -1,12 +1,14 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-export const connectDB = async (): Promise<void> => {
+const connectDB = async () => {
   try {
-    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/ai-job-search';
-    const conn = await mongoose.connect(mongoUri);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    await mongoose.connect(process.env.MONGO_URI as string);
+
+    console.log("✅ MongoDB Connected");
   } catch (error) {
-    console.error(`MongoDB Connection Error: ${(error as Error).message}`);
+    console.error("❌ MongoDB Connection Failed:", error);
     process.exit(1);
   }
 };
+
+export default connectDB;
