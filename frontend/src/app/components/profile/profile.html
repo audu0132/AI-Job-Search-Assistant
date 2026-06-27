@@ -1,0 +1,173 @@
+<div class="container-fluid p-0">
+  
+  <!-- Success Notification -->
+  @if (saveSuccess()) {
+    <div class="alert alert-success border-0 bg-success bg-opacity-15 text-success d-flex align-items-center gap-2 mb-4 animate-fade" role="alert">
+      <i class="bi bi-check-circle-fill"></i>
+      <div class="fw-bold">Profile updated successfully!</div>
+    </div>
+  }
+
+  <div class="row g-4">
+    <!-- Left Column: Profile Card -->
+    <div class="col-12 col-md-4">
+      <div class="glass-panel p-4 text-center position-relative h-100 d-flex flex-column align-items-center justify-content-center">
+        <!-- Profile Avatar with Gradient Ring -->
+        <div class="avatar-ring mb-3">
+          <div class="avatar-circle bg-dark d-flex align-items-center justify-content-center">
+            @if (authService.currentUser(); as user) {
+              <span class="fs-1 fw-bold text-gradient">{{ user.firstName[0] }}{{ user.lastName[0] }}</span>
+            }
+          </div>
+        </div>
+
+        @if (authService.currentUser(); as user) {
+          <h3 class="h5 fw-bold text-light mb-1">{{ user.firstName }} {{ user.lastName }}</h3>
+          <p class="text-secondary small mb-4">
+            @for (role of user.targetRoles; track role) {
+              <span class="d-inline-block px-1">{{ role }}</span>
+              @if (!$last) { <span>&bull;</span> }
+            }
+          </p>
+        }
+
+        <!-- File Upload Section -->
+        <div class="upload-box w-100 p-3 mt-auto rounded-3 border border-secondary border-dashed cursor-pointer">
+          <i class="bi bi-cloud-arrow-up fs-2 text-gradient mb-2 d-block"></i>
+          <span class="fw-bold text-light small d-block">Upload Resume / CV</span>
+          <span class="text-muted small" style="font-size: 10px;">PDF, DOCX up to 5MB</span>
+          <input type="file" class="d-none" id="resumeFile"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Profile Form -->
+    <div class="col-12 col-md-8">
+      <div class="glass-panel p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary border-opacity-25 pb-3">
+          <h4 class="h5 fw-bold m-0">Personal Profile Details</h4>
+          <button 
+            type="button" 
+            class="btn btn-sm px-3 rounded-pill" 
+            [class.btn-outline-light]="!isEditing()"
+            [class.btn-outline-danger]="isEditing()"
+            (click)="toggleEdit()"
+          >
+            {{ isEditing() ? 'Cancel' : 'Edit Profile' }}
+          </button>
+        </div>
+
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+          <!-- Names Row -->
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label text-secondary small fw-bold">First Name</label>
+              <input 
+                type="text" 
+                formControlName="firstName" 
+                class="form-control custom-input" 
+                [readonly]="!isEditing()"
+              />
+            </div>
+            <div class="col-6">
+              <label class="form-label text-secondary small fw-bold">Last Name</label>
+              <input 
+                type="text" 
+                formControlName="lastName" 
+                class="form-control custom-input" 
+                [readonly]="!isEditing()"
+              />
+            </div>
+          </div>
+
+          <!-- Contact info Row -->
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label text-secondary small fw-bold">Email Address</label>
+              <input 
+                type="email" 
+                formControlName="email" 
+                class="form-control custom-input bg-dark opacity-75" 
+                readonly
+              />
+            </div>
+            <div class="col-6">
+              <label class="form-label text-secondary small fw-bold">Phone Number</label>
+              <input 
+                type="tel" 
+                formControlName="phone" 
+                class="form-control custom-input" 
+                [readonly]="!isEditing()"
+              />
+            </div>
+          </div>
+
+          <!-- Target Roles & Experience -->
+          <div class="row g-3 mb-4">
+            <div class="col-6">
+              <label class="form-label text-secondary small fw-bold">Experience Level</label>
+              <select formControlName="experience" class="form-select custom-input" [disabled]="!isEditing()">
+                <option value="Entry Level">Entry Level</option>
+                <option value="1 Year">1 Year</option>
+                <option value="2-3 Years">2-3 Years</option>
+                <option value="4-5 Years">4-5 Years</option>
+                <option value="Senior Level">Senior Level</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label text-secondary small fw-bold">Target Roles (Comma-separated)</label>
+              <input 
+                type="text" 
+                formControlName="targetRoles" 
+                class="form-control custom-input" 
+                [readonly]="!isEditing()"
+              />
+            </div>
+          </div>
+
+          <!-- Skills Section -->
+          <div class="mb-4">
+            <label class="form-label text-secondary small fw-bold d-block">My Professional Skills</label>
+            
+            <!-- Skill chips list -->
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              @for (skill of currentSkills(); track skill) {
+                <span class="badge skill-chip d-flex align-items-center gap-2 py-2 px-3 rounded-pill bg-indigo bg-opacity-15 text-indigo border border-indigo border-opacity-10">
+                  <span>{{ skill }}</span>
+                  @if (isEditing()) {
+                    <i class="bi bi-x-circle-fill cursor-pointer remove-icon" (click)="removeSkill(skill)"></i>
+                  }
+                </span>
+              }
+            </div>
+
+            <!-- Skills Input -->
+            @if (isEditing()) {
+              <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-tags"></i></span>
+                <input 
+                  type="text" 
+                  [(ngModel)]="newSkillInput" 
+                  [ngModelOptions]="{standalone: true}"
+                  (keydown)="addSkill($event)" 
+                  class="form-control custom-input border-start-0" 
+                  placeholder="Type a skill and press Enter or comma..."
+                />
+              </div>
+            }
+          </div>
+
+          <!-- Submit Buttons -->
+          @if (isEditing()) {
+            <div class="d-flex gap-3 justify-content-end border-top border-secondary border-opacity-25 pt-4 mt-4">
+              <button type="button" class="btn btn-outline-light py-2 px-4 rounded-pill" (click)="toggleEdit()">Cancel</button>
+              <button type="submit" class="btn btn-gradient py-2 px-5 rounded-pill" [disabled]="profileForm.invalid">
+                Save Profile Changes
+              </button>
+            </div>
+          }
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

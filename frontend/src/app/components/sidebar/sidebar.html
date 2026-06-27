@@ -1,0 +1,27 @@
+<aside class="sidebar glass-panel h-100 p-3" [class.collapsed]="isCollapsed()">
+  <ul class="nav nav-pills flex-column mb-auto gap-2">
+    <!-- Dashboard Link -->
+    <li class="nav-item">
+      <a class="nav-link d-flex align-items-center gap-3 py-3 px-4" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="bi bi-grid-1x2-fill fs-5"></i>
+        <span class="link-text">Dashboard</span>
+      </a>
+    </li>
+    
+    <!-- Jobs Board Link -->
+    <li class="nav-item">
+      <a class="nav-link d-flex align-items-center gap-3 py-3 px-4" routerLink="/jobs" routerLinkActive="active">
+        <i class="bi bi-briefcase-fill fs-5"></i>
+        <span class="link-text">Find Jobs</span>
+      </a>
+    </li>
+
+    <!-- Profile Link -->
+    <li class="nav-item">
+      <a class="nav-link d-flex align-items-center gap-3 py-3 px-4" routerLink="/profile" routerLinkActive="active">
+        <i class="bi bi-person-badge-fill fs-5"></i>
+        <span class="link-text">My Profile</span>
+      </a>
+    </li>
+  </ul>
+</aside>

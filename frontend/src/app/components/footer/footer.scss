@@ -1,0 +1,16 @@
+.footer {
+  border-radius: 12px;
+  background: var(--navbar-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--card-border);
+}
+
+.footer-link {
+  color: var(--text-muted);
+  transition: var(--transition-smooth);
+  
+  &:hover {
+    color: var(--accent-primary);
+  }
+}

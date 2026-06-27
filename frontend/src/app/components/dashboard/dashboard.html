@@ -1,0 +1,145 @@
+<div class="container-fluid p-0">
+  <!-- Welcoming Section -->
+  @if (authService.currentUser(); as user) {
+    <div class="mb-4">
+      <h1 class="h2 fw-bold text-gradient mb-1">Welcome Back, {{ user.firstName }}! 👋</h1>
+      <p class="text-secondary">Here is what is happening with your job search assistant today.</p>
+    </div>
+  }
+
+  <!-- Stats Grid -->
+  <div class="row g-4 mb-5">
+    <!-- Card: Total Applied -->
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="glass-panel stat-card p-4 d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-secondary small fw-bold uppercase">Total Applied</span>
+          <h3 class="h1 fw-bold mt-2 mb-0">{{ totalApplied() }}</h3>
+        </div>
+        <div class="stat-icon bg-indigo">
+          <i class="bi bi-file-earmark-text-fill fs-3 text-indigo"></i>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Card: Shortlisted -->
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="glass-panel stat-card p-4 d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-secondary small fw-bold uppercase">Interviews Scheduled</span>
+          <h3 class="h1 fw-bold mt-2 mb-0">1</h3>
+        </div>
+        <div class="stat-icon bg-pink">
+          <i class="bi bi-calendar3 fs-3 text-pink"></i>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Card: AI Match Strength -->
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="glass-panel stat-card p-4 d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-secondary small fw-bold uppercase">Average Match Score</span>
+          <h3 class="h1 fw-bold mt-2 mb-0">82%</h3>
+        </div>
+        <div class="stat-icon bg-teal">
+          <i class="bi bi-pie-chart-fill fs-3 text-teal"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card: Offers Received -->
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="glass-panel stat-card p-4 d-flex align-items-center justify-content-between">
+        <div>
+          <span class="text-secondary small fw-bold uppercase">Offers Received</span>
+          <h3 class="h1 fw-bold mt-2 mb-0">0</h3>
+        </div>
+        <div class="stat-icon bg-orange">
+          <i class="bi bi-trophy-fill fs-3 text-orange"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Left: Recommended Jobs -->
+    <div class="col-12 col-lg-8">
+      <div class="glass-panel p-4 h-100">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="h5 fw-bold m-0 d-flex align-items-center gap-2">
+            <i class="bi bi-stars text-gradient"></i> Recommended for You
+          </h4>
+          <a routerLink="/jobs" class="text-gradient text-decoration-none fw-bold small">View All Jobs</a>
+        </div>
+
+        <div class="d-flex flex-column gap-3">
+          @for (job of recommendedJobs(); track job.id) {
+            <div class="job-item-card p-3 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+              <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <h5 class="h6 fw-bold m-0 text-light">{{ job.title }}</h5>
+                  <span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-10 py-1 px-2 small">{{ job.type }}</span>
+                </div>
+                <div class="small text-secondary">{{ job.company }} &bull; {{ job.location }}</div>
+                <div class="mt-2 d-flex flex-wrap gap-1">
+                  @for (skill of job.skillsRequired.slice(0, 3); track skill) {
+                    <span class="badge bg-indigo-subtle text-indigo-fg py-1 px-2 rounded-pill small">{{ skill }}</span>
+                  }
+                  @if (job.skillsRequired.length > 3) {
+                    <span class="text-muted small align-self-center ml-1">+{{ job.skillsRequired.length - 3 }} more</span>
+                  }
+                </div>
+              </div>
+              <div class="d-flex align-items-center justify-content-between justify-content-sm-end gap-3 border-top border-sm-0 pt-2 pt-sm-0">
+                <div class="text-center match-score-badge">
+                  <div class="score fw-bold" [class.high]="job.matchScore >= 80" [class.med]="job.matchScore >= 60 && job.matchScore < 80" [class.low]="job.matchScore < 60">
+                    {{ job.matchScore }}%
+                  </div>
+                  <div class="label text-muted small">Match</div>
+                </div>
+                
+                @if (job.applied) {
+                  <button class="btn btn-outline-success btn-sm py-2 px-3 rounded-pill" disabled>
+                    <i class="bi bi-check2-all"></i> Applied
+                  </button>
+                } @else {
+                  <button class="btn btn-gradient btn-sm py-2 px-3 rounded-pill" (click)="applyJob(job.id, $event)">
+                    Apply Now
+                  </button>
+                }
+              </div>
+            </div>
+          } @empty {
+            <p class="text-center text-muted py-4">No recommendations available at this time.</p>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Activities Timeline -->
+    <div class="col-12 col-lg-4">
+      <div class="glass-panel p-4 h-100">
+        <h4 class="h5 fw-bold mb-4">Recent Activity</h4>
+        
+        <div class="timeline">
+          @for (act of activities; track act.id) {
+            <div class="timeline-item d-flex gap-3 mb-4">
+              <div class="timeline-icon-container">
+                <div class="timeline-icon d-flex align-items-center justify-content-center rounded-circle" [class]="act.iconClass">
+                  <i class="bi" [class]="act.icon"></i>
+                </div>
+                <div class="timeline-line"></div>
+              </div>
+              <div class="timeline-content">
+                <h6 class="fw-bold text-light mb-1 small">{{ act.title }}</h6>
+                <p class="text-secondary small mb-1">{{ act.description }}</p>
+                <span class="text-muted small" style="font-size: 10px;">{{ act.time }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
