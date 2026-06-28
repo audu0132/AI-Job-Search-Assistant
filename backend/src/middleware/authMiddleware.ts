@@ -3,7 +3,9 @@ import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/User";
 
 export interface AuthRequest extends Request {
-  user?: IUser;
+  user?: {
+    id: string;
+  };
 }
 
 interface JwtPayload {
@@ -42,7 +44,7 @@ export const protect = async (
     // Verify token
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || "your_super_secret_key"
+      process.env.JWT_SECRET || "cZZHTOvllWuh71HYLMH5GuTVxiqqaJdZo6sgHbr4sFq"
     ) as JwtPayload;
 
     // Get user from the token
@@ -57,7 +59,7 @@ export const protect = async (
     }
 
     // Attach user to request object
-    req.user = user;
+    req.user = {id: user._id.toString()};
     next();
   } catch (error) {
     res.status(401).json({
