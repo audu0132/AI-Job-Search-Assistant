@@ -1,0 +1,63 @@
+.login-container{
+
+    height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#f5f7fa;
+
+}
+
+.login-card{
+
+    width:420px;
+
+    padding:30px;
+
+    border-radius:15px;
+
+}
+
+h1{
+
+    text-align:center;
+
+    font-size:28px;
+
+    font-weight:700;
+
+}
+
+p{
+
+    text-align:center;
+
+}
+
+mat-form-field{
+
+    width:100%;
+
+    margin-top:15px;
+
+}
+
+.login-btn{
+
+    width:100%;
+
+    margin-top:15px;
+
+    height:48px;
+
+}
+
+.register-text{
+
+    margin-top:20px;
+
+}

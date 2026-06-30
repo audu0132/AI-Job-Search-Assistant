@@ -1,25 +1,3 @@
-@if (authService.isAuthenticated()) {
-  <div class="app-container d-flex flex-column min-vh-100 p-3">
-    <!-- Top Navbar -->
-    <app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
-
-    <!-- Mid Section: Sidebar & Content -->
-    <div class="main-layout d-flex gap-4 flex-grow-1 mb-4 overflow-hidden">
-      <!-- Sidebar Panel -->
-      <app-sidebar [isCollapsed]="sidebarCollapsed()"></app-sidebar>
-
-      <!-- Main Router Outlet Box -->
-      <main class="content-wrapper flex-grow-1 overflow-auto">
-        <router-outlet></router-outlet>
-      </main>
-    </div>
-
-    <!-- Bottom Footer -->
-    <app-footer></app-footer>
-  </div>
-} @else {
-  <!-- Authentication Layout -->
-  <main class="auth-layout min-vh-100">
-    <router-outlet></router-outlet>
-  </main>
-}
+<router-outlet>
+  
+</router-outlet>

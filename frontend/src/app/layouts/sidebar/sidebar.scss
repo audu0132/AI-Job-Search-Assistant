@@ -1,0 +1,332 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 100vh;
+  background: linear-gradient(180deg, #0f1117 0%, #141824 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &.collapsed {
+    width: 72px;
+
+    .brand-name,
+    .nav-label,
+    .user-details {
+      opacity: 0;
+      width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .sidebar-footer {
+      justify-content: center;
+    }
+
+    .user-info {
+      justify-content: center;
+    }
+
+    .logout-btn {
+      display: none;
+    }
+
+    .collapse-btn {
+      right: 50%;
+      transform: translateX(50%);
+    }
+  }
+}
+
+// ─── Brand ───────────────────────────────────────────────────────────────────
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.brand-logo {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: #fff;
+  }
+}
+
+.brand-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: -0.02em;
+  transition: opacity 0.2s, width 0.3s;
+  white-space: nowrap;
+}
+
+// ─── Collapse Button ─────────────────────────────────────────────────────────
+
+.collapse-btn {
+  position: absolute;
+  top: 26px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  color: #64748b;
+  transition: background 0.2s, color 0.2s, right 0.3s, transform 0.3s;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover {
+    background: rgba(99, 102, 241, 0.2);
+    color: #818cf8;
+    border-color: rgba(99, 102, 241, 0.4);
+  }
+}
+
+// ─── Navigation ──────────────────────────────────────────────────────────────
+
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+  position: relative;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #e2e8f0;
+
+    .nav-icon {
+      color: #818cf8;
+    }
+  }
+
+  &.active {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.15));
+    color: #a5b4fc;
+    border: 1px solid rgba(99, 102, 241, 0.25);
+
+    .nav-icon {
+      color: #818cf8;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 25%;
+      height: 50%;
+      width: 3px;
+      background: linear-gradient(180deg, #6366f1, #8b5cf6);
+      border-radius: 0 3px 3px 0;
+    }
+  }
+}
+
+.nav-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: #64748b;
+  transition: color 0.2s;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.nav-label {
+  transition: opacity 0.2s, width 0.3s;
+  overflow: hidden;
+}
+
+// Tooltip shown when collapsed
+.nav-tooltip {
+  display: none;
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1e293b;
+  color: #e2e8f0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  pointer-events: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-right-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.sidebar.collapsed .nav-link:hover .nav-tooltip {
+  display: block;
+}
+
+// ─── Spacer ───────────────────────────────────────────────────────────────────
+
+.sidebar-spacer {
+  flex: 1;
+  min-height: 0;
+}
+
+// ─── Footer ───────────────────────────────────────────────────────────────────
+
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.2);
+  transition: justify-content 0.3s;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.user-avatar {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  transition: opacity 0.2s, width 0.3s;
+  overflow: hidden;
+}
+
+.user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-role {
+  font-size: 0.72rem;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.logout-btn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: #64748b;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #f87171;
+  }
+}

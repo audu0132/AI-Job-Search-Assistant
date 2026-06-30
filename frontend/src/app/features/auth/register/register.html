@@ -1,0 +1,104 @@
+<div class="register-container">
+
+    <mat-card class="register-card">
+
+        <h1>Create Account</h1>
+
+        <p>Join AI Job Search Assistant 🚀</p>
+
+        <form
+            [formGroup]="registerForm"
+            (ngSubmit)="onSubmit()">
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>First Name</mat-label>
+
+                <input
+                    matInput
+                    formControlName="firstName">
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>Last Name</mat-label>
+
+                <input
+                    matInput
+                    formControlName="lastName">
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>Email</mat-label>
+
+                <input
+                    matInput
+                    type="email"
+                    formControlName="email">
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>Phone</mat-label>
+
+                <input
+                    matInput
+                    formControlName="phone">
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>Password</mat-label>
+
+                <input
+                    matInput
+                    [type]="hidePassword ? 'password':'text'"
+                    formControlName="password">
+
+                <button
+                    mat-icon-button
+                    matSuffix
+                    type="button"
+                    (click)="hidePassword=!hidePassword">
+
+                    <mat-icon>
+
+                        {{hidePassword ? 'visibility':'visibility_off'}}
+
+                    </mat-icon>
+
+                </button>
+
+            </mat-form-field>
+
+            <button
+                mat-raised-button
+                color="primary"
+                class="register-btn">
+
+                Register
+
+            </button>
+
+        </form>
+
+        <p class="login-text">
+
+            Already have an account?
+
+            <a routerLink="/login">
+
+                Login
+
+            </a>
+
+        </p>
+
+    </mat-card>
+
+</div>

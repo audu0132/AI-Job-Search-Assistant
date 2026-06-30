@@ -1,0 +1,63 @@
+<aside class="sidebar" [class.collapsed]="collapsed()">
+
+  <!-- Logo / Brand -->
+  <div class="sidebar-brand">
+    <div class="brand-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+      </svg>
+    </div>
+    <span class="brand-name">JobAI</span>
+  </div>
+
+  <!-- Collapse Toggle -->
+  <button class="collapse-btn" (click)="toggleCollapse()" [title]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path [attr.d]="collapsed() ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'"/>
+    </svg>
+  </button>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      @for (item of navItems; track item.path) {
+        <li class="nav-item">
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="active"
+            class="nav-link"
+            [title]="item.label"
+          >
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path [attr.d]="item.icon"/>
+              </svg>
+            </span>
+            <span class="nav-label">{{ item.label }}</span>
+            <span class="nav-tooltip">{{ item.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <!-- Spacer -->
+  <div class="sidebar-spacer"></div>
+
+  <!-- User Profile Footer -->
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-avatar">{{ getUserInitials() }}</div>
+      <div class="user-details">
+        <span class="user-name">{{ getUserName() }}</span>
+        <span class="user-role">Job Seeker</span>
+      </div>
+    </div>
+    <button class="logout-btn" (click)="logout()" title="Sign out">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+      </svg>
+    </button>
+  </div>
+
+</aside>
