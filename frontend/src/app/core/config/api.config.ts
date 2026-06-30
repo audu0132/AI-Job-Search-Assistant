@@ -9,6 +9,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from '../../app.routes';
 import { authInterceptor } from '../interceptors/auth.interceptor';
 
+// Angular application bootstrap config
 export const appConfig: ApplicationConfig = {
 
   providers: [
@@ -23,4 +24,9 @@ export const appConfig: ApplicationConfig = {
 
   ]
 
+};
+
+// API settings config
+export const apiConfig = {
+  apiBaseUrl: 'http://localhost:8000/api',
 };

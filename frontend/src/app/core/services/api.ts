@@ -1,16 +1,16 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { API_CONFIG } from '../config/api.config';
-import { Token } from './token';
+import { TokenService } from './token';
+import { apiConfig } from '../config/api.config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Api {
   private readonly http = inject(HttpClient);
-  private readonly tokenService = inject(Token);
-  private readonly baseUrl = API_CONFIG.baseUrl;
+  private readonly tokenService = inject(TokenService);
+  private readonly baseUrl = apiConfig.apiBaseUrl;
 
   private getHeaders(): HttpHeaders {
     let headers = new HttpHeaders({
