@@ -1,1 +1,264 @@
-<p>home works!</p>
+<div class="home-page">
+
+  <!-- ── Page Header ───────────────────────────────────────── -->
+  <header class="page-header">
+    <div class="header-left">
+      <p class="greeting">{{ getGreeting() }}, <span class="user-name">{{ userName }}</span> 👋</p>
+      <h1 class="page-title">Your Job Search Dashboard</h1>
+      <p class="page-subtitle">Here's what's happening with your career journey today.</p>
+    </div>
+    <div class="header-right">
+      <div class="date-badge">
+        <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        <span>{{ todayDate }}</span>
+      </div>
+      <button class="btn-primary" (click)="searchJobs()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Search Jobs
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Stats Grid ─────────────────────────────────────────── -->
+  <section class="stats-grid">
+
+    <div class="stat-card stat-applications">
+      <div class="stat-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <p class="stat-label">Total Applications</p>
+        <p class="stat-value">{{ stats.applications }}</p>
+        <p class="stat-delta positive">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          +3 this week
+        </p>
+      </div>
+    </div>
+
+    <div class="stat-card stat-interviews">
+      <div class="stat-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+          <path d="M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <p class="stat-label">Interviews Scheduled</p>
+        <p class="stat-value">{{ stats.interviews }}</p>
+        <p class="stat-delta positive">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          +1 upcoming
+        </p>
+      </div>
+    </div>
+
+    <div class="stat-card stat-saved">
+      <div class="stat-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <p class="stat-label">Saved Jobs</p>
+        <p class="stat-value">{{ stats.savedJobs }}</p>
+        <p class="stat-delta neutral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          No change
+        </p>
+      </div>
+    </div>
+
+    <div class="stat-card stat-score">
+      <div class="stat-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <p class="stat-label">Resume Score</p>
+        <p class="stat-value">{{ stats.resumeScore }}<span class="stat-unit">%</span></p>
+        <div class="score-bar">
+          <div class="score-fill" [style.width.%]="stats.resumeScore"></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── Main Content Grid ──────────────────────────────────── -->
+  <div class="content-grid">
+
+    <!-- Left Column -->
+    <div class="content-left">
+
+      <!-- AI Insights Card -->
+      <div class="card ai-insights-card">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="ai-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <h2 class="card-title">AI Insights</h2>
+          </div>
+          <span class="badge badge-ai">Powered by AI</span>
+        </div>
+        <div class="insights-list">
+          @for (insight of aiInsights; track insight.id) {
+            <div class="insight-item" [class]="'insight-' + insight.type">
+              <div class="insight-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path [attr.d]="insight.icon"/>
+                </svg>
+              </div>
+              <div class="insight-body">
+                <p class="insight-title">{{ insight.title }}</p>
+                <p class="insight-desc">{{ insight.description }}</p>
+              </div>
+              <span class="insight-tag">{{ insight.tag }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Recent Applications -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Recent Applications</h2>
+          <button class="btn-ghost" (click)="viewAllApplications()">View all</button>
+        </div>
+
+        @if (recentApplications.length === 0) {
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+            </div>
+            <p class="empty-title">No applications yet</p>
+            <p class="empty-sub">Start applying to jobs and track your progress here.</p>
+            <button class="btn-primary sm" (click)="searchJobs()">Find Jobs</button>
+          </div>
+        } @else {
+          <div class="applications-list">
+            @for (app of recentApplications; track app.id) {
+              <div class="app-row">
+                <div class="company-logo" [style.background]="app.color">
+                  {{ app.company[0] }}
+                </div>
+                <div class="app-info">
+                  <p class="app-role">{{ app.role }}</p>
+                  <p class="app-company">{{ app.company }} · {{ app.location }}</p>
+                </div>
+                <div class="app-meta">
+                  <span class="status-badge" [class]="'status-' + app.status">{{ app.statusLabel }}</span>
+                  <p class="app-date">{{ app.appliedDate }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+    </div>
+
+    <!-- Right Column -->
+    <div class="content-right">
+
+      <!-- Quick Actions -->
+      <div class="card quick-actions-card">
+        <h2 class="card-title" style="margin-bottom:16px">Quick Actions</h2>
+        <div class="actions-grid">
+          @for (action of quickActions; track action.label) {
+            <button class="action-btn" (click)="action.handler()">
+              <div class="action-icon" [style.background]="action.bg">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path [attr.d]="action.icon"/>
+                </svg>
+              </div>
+              <span class="action-label">{{ action.label }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Application Status Breakdown -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Application Pipeline</h2>
+        </div>
+        <div class="pipeline-list">
+          @for (stage of pipeline; track stage.label) {
+            <div class="pipeline-item">
+              <div class="pipeline-left">
+                <span class="pipeline-dot" [style.background]="stage.color"></span>
+                <span class="pipeline-label">{{ stage.label }}</span>
+              </div>
+              <div class="pipeline-right">
+                <div class="pipeline-bar-wrap">
+                  <div class="pipeline-bar" [style.width.%]="stage.percent" [style.background]="stage.color"></div>
+                </div>
+                <span class="pipeline-count">{{ stage.count }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Upcoming Interviews -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Upcoming Interviews</h2>
+          <span class="badge badge-count">{{ upcomingInterviews.length }}</span>
+        </div>
+        @if (upcomingInterviews.length === 0) {
+          <div class="empty-state sm">
+            <p class="empty-title">No interviews scheduled</p>
+            <p class="empty-sub">Keep applying — interviews will show up here.</p>
+          </div>
+        } @else {
+          <div class="interview-list">
+            @for (iv of upcomingInterviews; track iv.id) {
+              <div class="interview-item">
+                <div class="interview-date-block" [style.background]="iv.color + '22'" [style.border-color]="iv.color + '44'">
+                  <span class="iv-day">{{ iv.day }}</span>
+                  <span class="iv-month">{{ iv.month }}</span>
+                </div>
+                <div class="interview-body">
+                  <p class="iv-role">{{ iv.role }}</p>
+                  <p class="iv-company">{{ iv.company }}</p>
+                  <p class="iv-time">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    {{ iv.time }} · {{ iv.type }}
+                  </p>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
