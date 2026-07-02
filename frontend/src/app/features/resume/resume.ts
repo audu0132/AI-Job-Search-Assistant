@@ -55,7 +55,7 @@ type ActiveTab = 'edit' | 'preview';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './resume.html',
-  styleUrl: './resume.scss',
+  styleUrl:    './resume.scss',
 })
 export class Resume {
   activeSection: ActiveSection = 'personal';
