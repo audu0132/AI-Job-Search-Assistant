@@ -1,0 +1,538 @@
+<div class="resume-page">
+
+  <!-- ── Ambient Orbs ───────────────────────────────────────────────── -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <!-- ── Page Header ───────────────────────────────────────────────── -->
+  <header class="page-header">
+    <div class="header-left">
+      <div class="page-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <span>Resume Builder</span>
+      </div>
+      <h1 class="page-title">Build Your <span class="title-highlight">Perfect Resume</span></h1>
+      <p class="page-subtitle">AI-powered resume editor with live preview and ATS optimization.</p>
+    </div>
+    <div class="header-right">
+      <!-- ATS Score Pill -->
+      <div class="ats-pill" [style.border-color]="atsColor + '44'" [style.background]="atsColor + '14'">
+        <div class="ats-ring">
+          <svg viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
+            <circle cx="18" cy="18" r="14" fill="none" [style.stroke]="atsColor" stroke-width="3"
+              [attr.stroke-dasharray]="(atsScore * 87.96 / 100) + ' 87.96'"
+              stroke-dashoffset="22" stroke-linecap="round"/>
+          </svg>
+          <span class="ats-score-text" [style.color]="atsColor">{{ atsScore }}</span>
+        </div>
+        <div class="ats-info">
+          <span class="ats-label">ATS Score</span>
+          <span class="ats-status" [style.color]="atsColor">{{ atsLabel }}</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <span class="last-saved">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          Saved {{ lastSaved }}
+        </span>
+        <button class="btn-outline" (click)="saveResume()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+          </svg>
+          Save
+        </button>
+        <button class="btn-primary" (click)="downloadResume()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download PDF
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Tab Switcher ───────────────────────────────────────────────── -->
+  <div class="tab-bar">
+    <button class="tab-btn" [class.active]="activeTab === 'edit'" (click)="setTab('edit')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </svg>
+      Edit Resume
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'preview'" (click)="setTab('preview')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+      Live Preview
+    </button>
+  </div>
+
+  <!-- ── Edit Mode ─────────────────────────────────────────────────── -->
+  @if (activeTab === 'edit') {
+    <div class="editor-layout">
+
+      <!-- Left: Section Nav -->
+      <nav class="section-nav">
+        @for (section of sections; track section.key) {
+          <button class="section-nav-item" [class.active]="activeSection === section.key"
+                  (click)="setSection(section.key)">
+            <div class="nav-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path [attr.d]="section.icon"/>
+              </svg>
+            </div>
+            <span>{{ section.label }}</span>
+            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        }
+      </nav>
+
+      <!-- Right: Section Form -->
+      <div class="section-form">
+
+        <!-- ── Personal Info ──────────────────────────────────────── -->
+        @if (activeSection === 'personal') {
+          <div class="form-section">
+            <div class="form-section-header">
+              <h2 class="form-section-title">Personal Information</h2>
+              <p class="form-section-sub">Basic details that appear at the top of your resume.</p>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field">
+                <label class="field-label">Full Name</label>
+                <input class="field-input" type="text" [(ngModel)]="personal.fullName" placeholder="Alex Johnson"/>
+              </div>
+              <div class="field">
+                <label class="field-label">Professional Title</label>
+                <input class="field-input" type="text" [(ngModel)]="personal.title" placeholder="Senior Frontend Engineer"/>
+              </div>
+              <div class="field">
+                <label class="field-label">Email Address</label>
+                <div class="input-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <input class="field-input has-icon" type="email" [(ngModel)]="personal.email" placeholder="alex@example.com"/>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-label">Phone</label>
+                <div class="input-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.5 10.78 19.79 19.79 0 01.45 2.16 2 2 0 012.44 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.16 6.16l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                  <input class="field-input has-icon" type="tel" [(ngModel)]="personal.phone" placeholder="+1 (555) 000-1234"/>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-label">Location</label>
+                <div class="input-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <input class="field-input has-icon" type="text" [(ngModel)]="personal.location" placeholder="San Francisco, CA"/>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-label">LinkedIn URL</label>
+                <div class="input-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                  <input class="field-input has-icon" type="text" [(ngModel)]="personal.linkedin" placeholder="linkedin.com/in/username"/>
+                </div>
+              </div>
+              <div class="field field-full">
+                <label class="field-label">Personal Website</label>
+                <div class="input-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                  <input class="field-input has-icon" type="text" [(ngModel)]="personal.website" placeholder="yourwebsite.com"/>
+                </div>
+              </div>
+              <div class="field field-full">
+                <label class="field-label">Professional Summary</label>
+                <textarea class="field-textarea" [(ngModel)]="personal.summary" rows="4"
+                  placeholder="Write a compelling summary of your professional background and goals..."></textarea>
+                <span class="char-count">{{ personal.summary.length }} characters</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- ── Experience ─────────────────────────────────────────── -->
+        @if (activeSection === 'experience') {
+          <div class="form-section">
+            <div class="form-section-header">
+              <h2 class="form-section-title">Work Experience</h2>
+              <p class="form-section-sub">List your most recent positions first.</p>
+            </div>
+
+            @for (exp of experiences; track trackById($index, exp)) {
+              <div class="exp-card" [class.expanded]="expandedExpId === exp.id">
+                <div class="exp-card-header" (click)="toggleExpanded(exp.id)">
+                  <div class="exp-card-info">
+                    <div class="exp-company-logo">{{ exp.company ? exp.company[0] : '?' }}</div>
+                    <div>
+                      <p class="exp-role-label">{{ exp.role || 'New Position' }}</p>
+                      <p class="exp-company-label">{{ exp.company || 'Company Name' }} {{ exp.current ? '· Present' : '' }}</p>
+                    </div>
+                  </div>
+                  <div class="exp-card-actions">
+                    <button class="btn-icon danger" (click)="removeExperience(exp.id); $event.stopPropagation()">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+                    </button>
+                    <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                  </div>
+                </div>
+
+                @if (expandedExpId === exp.id) {
+                  <div class="exp-card-body">
+                    <div class="form-grid-2">
+                      <div class="field">
+                        <label class="field-label">Job Title</label>
+                        <input class="field-input" type="text" [(ngModel)]="exp.role" placeholder="Senior Engineer"/>
+                      </div>
+                      <div class="field">
+                        <label class="field-label">Company</label>
+                        <input class="field-input" type="text" [(ngModel)]="exp.company" placeholder="Acme Corp"/>
+                      </div>
+                      <div class="field">
+                        <label class="field-label">Start Date</label>
+                        <input class="field-input" type="month" [(ngModel)]="exp.startDate"/>
+                      </div>
+                      <div class="field">
+                        <label class="field-label">End Date</label>
+                        <input class="field-input" type="month" [(ngModel)]="exp.endDate" [disabled]="exp.current"/>
+                        <label class="checkbox-label">
+                          <input type="checkbox" [(ngModel)]="exp.current"/> Currently working here
+                        </label>
+                      </div>
+                      <div class="field field-full">
+                        <label class="field-label">Location</label>
+                        <input class="field-input" type="text" [(ngModel)]="exp.location" placeholder="Remote / City, State"/>
+                      </div>
+                    </div>
+
+                    <!-- Bullets -->
+                    <div class="bullets-section">
+                      <label class="field-label">Key Achievements & Responsibilities</label>
+                      <div class="bullets-list">
+                        @for (bullet of exp.bullets; track $index) {
+                          <div class="bullet-item">
+                            <span class="bullet-dot"></span>
+                            <span class="bullet-text">{{ bullet }}</span>
+                            <button class="btn-icon-sm" (click)="removeBullet(exp, $index)">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                          </div>
+                        }
+                      </div>
+                      <div class="add-bullet-wrap">
+                        <input class="field-input" type="text" [(ngModel)]="newBullet"
+                          placeholder="Add a key achievement or responsibility…"
+                          (keyup.enter)="addBullet(exp)"/>
+                        <button class="btn-add" (click)="addBullet(exp)">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            <button class="btn-add-section" (click)="addExperience()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Experience
+            </button>
+          </div>
+        }
+
+        <!-- ── Education ──────────────────────────────────────────── -->
+        @if (activeSection === 'education') {
+          <div class="form-section">
+            <div class="form-section-header">
+              <h2 class="form-section-title">Education</h2>
+              <p class="form-section-sub">Your academic background and qualifications.</p>
+            </div>
+
+            @for (edu of educations; track trackById($index, edu)) {
+              <div class="edu-card">
+                <div class="edu-card-header">
+                  <div class="edu-icon">🎓</div>
+                  <div class="edu-title-group">
+                    <p class="edu-degree">{{ edu.degree || 'Degree' }} in {{ edu.field || 'Field' }}</p>
+                    <p class="edu-institution">{{ edu.institution || 'Institution' }}</p>
+                  </div>
+                  <button class="btn-icon danger" (click)="removeEducation(edu.id)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+                  </button>
+                </div>
+                <div class="form-grid-2" style="margin-top:16px">
+                  <div class="field">
+                    <label class="field-label">Institution</label>
+                    <input class="field-input" type="text" [(ngModel)]="edu.institution" placeholder="University Name"/>
+                  </div>
+                  <div class="field">
+                    <label class="field-label">GPA (optional)</label>
+                    <input class="field-input" type="text" [(ngModel)]="edu.gpa" placeholder="3.8"/>
+                  </div>
+                  <div class="field">
+                    <label class="field-label">Degree</label>
+                    <input class="field-input" type="text" [(ngModel)]="edu.degree" placeholder="Bachelor of Science"/>
+                  </div>
+                  <div class="field">
+                    <label class="field-label">Field of Study</label>
+                    <input class="field-input" type="text" [(ngModel)]="edu.field" placeholder="Computer Science"/>
+                  </div>
+                  <div class="field">
+                    <label class="field-label">Start Date</label>
+                    <input class="field-input" type="month" [(ngModel)]="edu.startDate"/>
+                  </div>
+                  <div class="field">
+                    <label class="field-label">End Date</label>
+                    <input class="field-input" type="month" [(ngModel)]="edu.endDate"/>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <button class="btn-add-section" (click)="addEducation()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Education
+            </button>
+          </div>
+        }
+
+        <!-- ── Skills ─────────────────────────────────────────────── -->
+        @if (activeSection === 'skills') {
+          <div class="form-section">
+            <div class="form-section-header">
+              <h2 class="form-section-title">Skills</h2>
+              <p class="form-section-sub">Rate your proficiency for each skill (1–5 dots).</p>
+            </div>
+
+            <div class="skills-grid">
+              @for (skill of skills; track trackById($index, skill)) {
+                <div class="skill-chip">
+                  <span class="skill-name">{{ skill.name }}</span>
+                  <div class="skill-dots">
+                    @for (dot of skillDots(skill.level); track dot) {
+                      <span class="skill-dot" [class.filled]="dot <= skill.level"
+                            (click)="skill.level = dot"></span>
+                    }
+                  </div>
+                  <button class="btn-icon-sm" (click)="removeSkill(skill.id)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </button>
+                </div>
+              }
+            </div>
+
+            <div class="add-skill-row">
+              <input class="field-input" type="text" [(ngModel)]="newSkillName"
+                placeholder="Add a skill (e.g. TypeScript)" (keyup.enter)="addSkill()"/>
+              <div class="skill-level-picker">
+                @for (dot of skillDots(5); track dot) {
+                  <span class="skill-dot lg" [class.filled]="dot <= newSkillLevel"
+                        (click)="newSkillLevel = dot"></span>
+                }
+              </div>
+              <button class="btn-add" (click)="addSkill()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- ── Certificates ───────────────────────────────────────── -->
+        @if (activeSection === 'certificates') {
+          <div class="form-section">
+            <div class="form-section-header">
+              <h2 class="form-section-title">Certifications</h2>
+              <p class="form-section-sub">Professional certificates and licenses.</p>
+            </div>
+
+            @for (cert of certificates; track trackById($index, cert)) {
+              <div class="cert-card">
+                <div class="cert-icon">🏅</div>
+                <div class="form-grid-2" style="flex:1">
+                  <div class="field">
+                    <label class="field-label">Certificate Name</label>
+                    <input class="field-input" type="text" [(ngModel)]="cert.name" placeholder="AWS Solutions Architect"/>
+                  </div>
+                  <div class="field">
+                    <label class="field-label">Issuing Organization</label>
+                    <input class="field-input" type="text" [(ngModel)]="cert.issuer" placeholder="Amazon AWS"/>
+                  </div>
+                  <div class="field">
+                    <label class="field-label">Date Obtained</label>
+                    <input class="field-input" type="month" [(ngModel)]="cert.date"/>
+                  </div>
+                </div>
+                <button class="btn-icon danger" (click)="removeCertificate(cert.id)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+                </button>
+              </div>
+            }
+
+            <button class="btn-add-section" (click)="addCertificate()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Certificate
+            </button>
+          </div>
+        }
+
+      </div><!-- /section-form -->
+    </div><!-- /editor-layout -->
+  }
+
+  <!-- ── Preview Mode ───────────────────────────────────────────────── -->
+  @if (activeTab === 'preview') {
+    <div class="preview-wrapper">
+      <div class="preview-doc">
+
+        <!-- Resume Header -->
+        <div class="rv-header">
+          <div class="rv-name-block">
+            <h1 class="rv-name">{{ personal.fullName || 'Your Name' }}</h1>
+            <p class="rv-title">{{ personal.title || 'Professional Title' }}</p>
+          </div>
+          <div class="rv-contacts">
+            @if (personal.email) {
+              <span class="rv-contact-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                {{ personal.email }}
+              </span>
+            }
+            @if (personal.phone) {
+              <span class="rv-contact-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.5 10.78 19.79 19.79 0 01.45 2.16 2 2 0 012.44 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.16 6.16l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                {{ personal.phone }}
+              </span>
+            }
+            @if (personal.location) {
+              <span class="rv-contact-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                {{ personal.location }}
+              </span>
+            }
+            @if (personal.linkedin) {
+              <span class="rv-contact-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                {{ personal.linkedin }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!-- Summary -->
+        @if (personal.summary) {
+          <div class="rv-section">
+            <h2 class="rv-section-title">Summary</h2>
+            <div class="rv-divider"></div>
+            <p class="rv-summary-text">{{ personal.summary }}</p>
+          </div>
+        }
+
+        <!-- Experience -->
+        @if (experiences.length > 0) {
+          <div class="rv-section">
+            <h2 class="rv-section-title">Experience</h2>
+            <div class="rv-divider"></div>
+            @for (exp of experiences; track exp.id) {
+              <div class="rv-exp-item">
+                <div class="rv-exp-header">
+                  <div>
+                    <p class="rv-exp-role">{{ exp.role }}</p>
+                    <p class="rv-exp-company">{{ exp.company }} · {{ exp.location }}</p>
+                  </div>
+                  <span class="rv-date">
+                    {{ formatDate(exp.startDate) }} – {{ exp.current ? 'Present' : formatDate(exp.endDate) }}
+                  </span>
+                </div>
+                @if (exp.bullets.length > 0) {
+                  <ul class="rv-bullets">
+                    @for (b of exp.bullets; track $index) {
+                      <li>{{ b }}</li>
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Education -->
+        @if (educations.length > 0) {
+          <div class="rv-section">
+            <h2 class="rv-section-title">Education</h2>
+            <div class="rv-divider"></div>
+            @for (edu of educations; track edu.id) {
+              <div class="rv-edu-item">
+                <div class="rv-exp-header">
+                  <div>
+                    <p class="rv-exp-role">{{ edu.degree }} in {{ edu.field }}</p>
+                    <p class="rv-exp-company">{{ edu.institution }}</p>
+                  </div>
+                  <span class="rv-date">{{ formatDate(edu.startDate) }} – {{ formatDate(edu.endDate) }}</span>
+                </div>
+                @if (edu.gpa) {
+                  <p class="rv-gpa">GPA: {{ edu.gpa }}</p>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Skills -->
+        @if (skills.length > 0) {
+          <div class="rv-section">
+            <h2 class="rv-section-title">Skills</h2>
+            <div class="rv-divider"></div>
+            <div class="rv-skills-grid">
+              @for (skill of skills; track skill.id) {
+                <div class="rv-skill-item">
+                  <span class="rv-skill-name">{{ skill.name }}</span>
+                  <div class="rv-skill-dots">
+                    @for (dot of skillDots(5); track dot) {
+                      <span class="rv-dot" [class.filled]="dot <= skill.level"></span>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Certificates -->
+        @if (certificates.length > 0) {
+          <div class="rv-section">
+            <h2 class="rv-section-title">Certifications</h2>
+            <div class="rv-divider"></div>
+            @for (cert of certificates; track cert.id) {
+              <div class="rv-cert-item">
+                <p class="rv-exp-role">{{ cert.name }}</p>
+                <p class="rv-exp-company">{{ cert.issuer }} · {{ formatDate(cert.date) }}</p>
+              </div>
+            }
+          </div>
+        }
+
+      </div><!-- /preview-doc -->
+    </div><!-- /preview-wrapper -->
+  }
+
+</div>
