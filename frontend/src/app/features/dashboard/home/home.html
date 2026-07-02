@@ -1,11 +1,22 @@
 <div class="home-page">
 
-  <!-- ── Page Header ───────────────────────────────────────── -->
+  <!-- ── Ambient Background Orbs ─────────────────────────────── -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- ── Page Header ────────────────────────────────────────────────── -->
   <header class="page-header">
     <div class="header-left">
-      <p class="greeting">{{ getGreeting() }}, <span class="user-name">{{ userName }}</span> 👋</p>
-      <h1 class="page-title">Your Job Search Dashboard</h1>
-      <p class="page-subtitle">Here's what's happening with your career journey today.</p>
+      <div class="greeting-chip">
+        <span class="greeting-dot"></span>
+        <span>{{ getGreeting() }}, <strong>{{ userName }}</strong> 👋</span>
+      </div>
+      <h1 class="page-title">
+        Your Job Search
+        <span class="title-highlight">Dashboard</span>
+      </h1>
+      <p class="page-subtitle">Track your career journey — <span class="subtitle-accent">{{ stats.applications }} applications</span> and counting.</p>
     </div>
     <div class="header-right">
       <div class="date-badge">
@@ -22,15 +33,16 @@
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        Search Jobs
+        Find Jobs
       </button>
     </div>
   </header>
 
-  <!-- ── Stats Grid ─────────────────────────────────────────── -->
+  <!-- ── Stats Grid ─────────────────────────────────────────────────── -->
   <section class="stats-grid">
 
     <div class="stat-card stat-applications">
+      <div class="stat-glow"></div>
       <div class="stat-icon-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -44,9 +56,23 @@
           +3 this week
         </p>
       </div>
+      <div class="stat-ring">
+        <svg viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2.5"/>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="url(#grad-apps)" stroke-width="2.5"
+            stroke-dasharray="75 25" stroke-dashoffset="25" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="grad-apps" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#6366f1"/>
+              <stop offset="100%" stop-color="#8b5cf6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
     </div>
 
     <div class="stat-card stat-interviews">
+      <div class="stat-glow"></div>
       <div class="stat-icon-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
@@ -63,9 +89,23 @@
           +1 upcoming
         </p>
       </div>
+      <div class="stat-ring">
+        <svg viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2.5"/>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="url(#grad-iv)" stroke-width="2.5"
+            stroke-dasharray="25 75" stroke-dashoffset="25" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="grad-iv" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#8b5cf6"/>
+              <stop offset="100%" stop-color="#ec4899"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
     </div>
 
     <div class="stat-card stat-saved">
+      <div class="stat-glow"></div>
       <div class="stat-icon-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
@@ -79,9 +119,23 @@
           No change
         </p>
       </div>
+      <div class="stat-ring">
+        <svg viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2.5"/>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="url(#grad-saved)" stroke-width="2.5"
+            stroke-dasharray="60 40" stroke-dashoffset="25" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="grad-saved" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#06b6d4"/>
+              <stop offset="100%" stop-color="#0284c7"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
     </div>
 
     <div class="stat-card stat-score">
+      <div class="stat-glow"></div>
       <div class="stat-icon-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
@@ -94,11 +148,24 @@
           <div class="score-fill" [style.width.%]="stats.resumeScore"></div>
         </div>
       </div>
+      <div class="stat-ring">
+        <svg viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2.5"/>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="url(#grad-score)" stroke-width="2.5"
+            [attr.stroke-dasharray]="stats.resumeScore + ' ' + (100 - stats.resumeScore)" stroke-dashoffset="25" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="grad-score" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#10b981"/>
+              <stop offset="100%" stop-color="#34d399"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
     </div>
 
   </section>
 
-  <!-- ── Main Content Grid ──────────────────────────────────── -->
+  <!-- ── Main Content Grid ─────────────────────────────────────────── -->
   <div class="content-grid">
 
     <!-- Left Column -->
@@ -117,7 +184,10 @@
             </div>
             <h2 class="card-title">AI Insights</h2>
           </div>
-          <span class="badge badge-ai">Powered by AI</span>
+          <span class="badge badge-ai">
+            <span class="badge-pulse"></span>
+            Powered by AI
+          </span>
         </div>
         <div class="insights-list">
           @for (insight of aiInsights; track insight.id) {
@@ -141,7 +211,12 @@
       <div class="card">
         <div class="card-header">
           <h2 class="card-title">Recent Applications</h2>
-          <button class="btn-ghost" (click)="viewAllApplications()">View all</button>
+          <button class="btn-ghost" (click)="viewAllApplications()">
+            View all
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
         </div>
 
         @if (recentApplications.length === 0) {
@@ -164,7 +239,12 @@
                 </div>
                 <div class="app-info">
                   <p class="app-role">{{ app.role }}</p>
-                  <p class="app-company">{{ app.company }} · {{ app.location }}</p>
+                  <p class="app-company">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                    </svg>
+                    {{ app.company }} · {{ app.location }}
+                  </p>
                 </div>
                 <div class="app-meta">
                   <span class="status-badge" [class]="'status-' + app.status">{{ app.statusLabel }}</span>
@@ -183,7 +263,7 @@
 
       <!-- Quick Actions -->
       <div class="card quick-actions-card">
-        <h2 class="card-title" style="margin-bottom:16px">Quick Actions</h2>
+        <h2 class="card-title" style="margin-bottom:18px">Quick Actions</h2>
         <div class="actions-grid">
           @for (action of quickActions; track action.label) {
             <button class="action-btn" (click)="action.handler()">
@@ -198,10 +278,11 @@
         </div>
       </div>
 
-      <!-- Application Status Breakdown -->
+      <!-- Application Pipeline -->
       <div class="card">
         <div class="card-header">
           <h2 class="card-title">Application Pipeline</h2>
+          <span class="pipeline-total">{{ stats.applications }} total</span>
         </div>
         <div class="pipeline-list">
           @for (stage of pipeline; track stage.label) {
@@ -250,6 +331,9 @@
                     </svg>
                     {{ iv.time }} · {{ iv.type }}
                   </p>
+                </div>
+                <div class="iv-type-badge" [style.background]="iv.color + '22'" [style.color]="iv.color">
+                  {{ iv.type }}
                 </div>
               </div>
             }
